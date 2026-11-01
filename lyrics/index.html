@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BRKNH4RT</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/img/img.ico" type="image/x-icon">
+</head>
+<body>
+
+  <h1 class="title">BRKNH4RT</h1>
+
+  <div class="tabs">
+    <a href="/" data-i18n="nav_main">Главная</a>
+    <a href="/music" data-i18n="nav_music">Музыка</a>
+    <a href="/lyrics" class="active" data-i18n="nav_lyrics">Тексты</a>
+  </div>
+
+  <div class="lyrics-list" id="lyrics-container"></div>
+
+  <script src="/i18n.js"></script>
+  <script>
+    initLang();
+    renderLyrics();
+
+    document.addEventListener('langChanged', renderLyrics);
+
+    function renderLyrics() {
+      const lang      = getCurrentLang();
+      const songs     = i18n[lang]['lyrics'];
+      const container = document.getElementById('lyrics-container');
+      container.innerHTML = songs.map(song => `
+        <div class="song">
+          <h2>${song.title}</h2>
+          <p>${song.lines.join('<br>')}</p>
+        </div>
+      `).join('<hr class="divider">');
+    }
+  </script>
+</body>
+</html>

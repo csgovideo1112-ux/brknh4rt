@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRKNH4RT</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/img/img.ico" type="image/x-icon">
+</head>
+<body>
+
+  <h1 class="title">BRKNH4RT</h1>
+
+  <div class="lang-switcher">
+    <button onclick="setLang('ru')" id="btn-ru">RU</button>
+    <span class="lang-sep">·</span>
+    <button onclick="setLang('en')" id="btn-en">EN</button>
+    <span class="lang-sep">·</span>
+    <button onclick="setLang('de')" id="btn-de">DE</button>
+  </div>
+
+  <div class="tabs">
+    <a href="/" class="active" data-i18n="nav_main">Главная</a>
+    <a href="/music" data-i18n="nav_music">Музыка</a>
+    <a href="/lyrics" data-i18n="nav_lyrics">Тексты</a>
+  </div>
+
+  <div class="gallery">
+    <div class="gallery-item"><img src="/img/photo01.webp" alt="photo 01"></div>
+    <div class="gallery-item"><img src="/img/photo02.webp" alt="photo 02"></div>
+    <div class="gallery-item"><img src="/img/photo03.webp" alt="photo 03"></div>
+    <div class="gallery-item"><img src="/img/photo04.webp" alt="photo 04"></div>
+    <div class="gallery-item"><img src="/img/photo05.webp" alt="photo 05"></div>
+    <div class="gallery-item"><img src="/img/photo06.webp" alt="photo 06"></div>
+  </div>
+
+  <div class="description">
+    <p data-i18n="index_desc"></p>
+  </div>
+
+  <script src="/i18n.js"></script>
+  <script>initLang();</script>
+</body>
+</html>
