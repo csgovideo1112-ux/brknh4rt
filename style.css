@@ -194,50 +194,78 @@ hr.divider {
 
 /* responsive */
 @media (max-width: 560px) {
+  body {
+    padding: 24px 12px 60px;
+  }
+
   .title {
     font-size: 34px;
     letter-spacing: 8px;
   }
-  
+
   .tabs {
-    margin-bottom: 32px;
+    margin-bottom: 28px;
+    font-size: 15px;
   }
-  
+
   .tabs a {
-    margin: 0 6px;
-    padding: 4px 14px;
+    margin: 0 4px;
+    padding: 4px 12px;
   }
-  
+
+  /* gallery: one photo per row, full width */
   .gallery {
-    grid-template-columns: repeat(2, 1fr);
-    margin-bottom: 32px;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-width: 100%;
+    margin-bottom: 28px;
   }
-  
+
+  .gallery-item {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* albums */
   .albums {
-    gap: 25px;
-    margin-bottom: 32px;
+    gap: 20px;
+    margin-bottom: 28px;
   }
-  
+
   .album {
-    width: 130px;
+    width: 120px;
   }
-  
+
   .detail-title {
     font-size: 20px;
   }
-  
+
   .detail-desc {
     font-size: 13px;
   }
-  
+
+  /* lyrics */
+  .lyrics-list {
+    padding: 0 4px;
+  }
+
   .song h2 {
     font-size: 22px;
     letter-spacing: 1.5px;
   }
-  
+
   .song p {
     font-size: 14px;
     line-height: 1.7;
+  }
+
+  /* description */
+  .description {
+    font-size: 14px;
+  }
+
+  /* lang switcher */
+  .lang-switcher {
+    margin-bottom: 14px;
   }
 }
 /* ─── lang switcher ─── */
