@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BRKNH4RT</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="img/img.ico" type="image/x-icon">
+</head>
+<body>
+
+  <h1 class="title">BRKNH4RT</h1>
+
+  <div class="lang-switcher">
+    <button onclick="setLang('ru')" id="btn-ru">RU</button>
+    <span class="lang-sep">·</span>
+    <button onclick="setLang('en')" id="btn-en">EN</button>
+    <span class="lang-sep">·</span>
+    <button onclick="setLang('de')" id="btn-de">DE</button>
+  </div>
+
+  <div class="tabs">
+    <a href="index.html" data-i18n="nav_main">Main</a>
+    <a href="music.html" class="active" data-i18n="nav_music">Music</a>
+    <a href="lyrics.html" data-i18n="nav_lyrics">Lyrics</a>
+  </div>
+
+  <div class="albums">
+    <div class="album">
+      <div class="album-cover" data-album="1">
+        <img src="img/album01.jpg" alt="DELUXE UND SCHÖNHEIT">
+      </div>
+    </div>
+    <div class="album">
+      <div class="album-cover" data-album="2">
+        <img src="img/album02.jpg" alt="ANHEDONIA">
+      </div>
+    </div>
+    <div class="album">
+      <div class="album-cover" data-album="3">
+        <img src="img/album03.png" alt="BRKNH4RT">
+      </div>
+    </div>
+  </div>
+
+  <div class="album-detail">
+    <h3 class="detail-title" id="detail-title"></h3>
+    <p class="detail-desc" id="detail-desc"></p>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script>
+    initLang();
+
+    const detailTitle = document.getElementById('detail-title');
+    const detailDesc  = document.getElementById('detail-desc');
+    const covers      = document.querySelectorAll('.album-cover');
+
+    function showAlbum(albumNum) {
+      const lang  = getCurrentLang();
+      const album = i18n[lang]['albums'][albumNum];
+      if (album) {
+        detailTitle.textContent = album.title;
+        detailDesc.textContent  = album.desc;
+      }
+    }
+
+    covers.forEach(cover => {
+      cover.addEventListener('click', function () {
+        showAlbum(this.getAttribute('data-album'));
+      });
+    });
+
+    // re-render open album on language change
+    document.addEventListener('langChanged', function () {
+      if (detailTitle.textContent) {
+        // find which album is currently shown by title match across all langs
+        for (const num of ['1','2','3']) {
+          for (const l of ['ru','en','de']) {
+            if (i18n[l]['albums'][num] && i18n[l]['albums'][num].title === detailTitle.textContent) {
+              showAlbum(num);
+              return;
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>
