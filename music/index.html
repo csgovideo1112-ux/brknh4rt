@@ -2,87 +2,110 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>BRKNH4RT</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="icon" href="/img/img.ico" type="image/x-icon">
 </head>
 <body>
-
-  <h1 class="title">BRKNH4RT</h1>
-
-  <div class="lang-switcher">
-    <button onclick="setLang('ru')" id="btn-ru">RU</button>
-    <span class="lang-sep">·</span>
-    <button onclick="setLang('en')" id="btn-en">EN</button>
-    <span class="lang-sep">·</span>
-    <button onclick="setLang('de')" id="btn-de">DE</button>
-  </div>
-
-  <div class="tabs">
-    <a href="/" data-i18n="nav_main">Главная</a>
-    <a href="/music" class="active" data-i18n="nav_music">Музыка</a>
-    <a href="/lyrics" data-i18n="nav_lyrics">Тексты</a>
-  </div>
-
-  <div class="albums">
-    <div class="album">
-      <div class="album-cover" data-album="1">
-        <img src="/img/album01.webp" alt="DELUXE UND SCHÖNHEIT">
-      </div>
-    </div>
-    <div class="album">
-      <div class="album-cover" data-album="2">
-        <img src="/img/album02.webp" alt="ANHEDONIA">
-      </div>
-    </div>
-    <div class="album">
-      <div class="album-cover" data-album="3">
-        <img src="/img/album03.webp" alt="BRKNH4RT">
-      </div>
+<div class="win">
+  <div class="titlebar">
+    <img src="/img/img.ico" alt="">
+    <span class="name">music.html</span>
+    <div class="winbtns">
+      <button class="tb" data-lang="ru" onclick="setLang('ru')">RU</button>
+      <button class="tb" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="tb" data-lang="de" onclick="setLang('de')">DE</button>
     </div>
   </div>
 
-  <div class="album-detail">
-    <h3 class="detail-title" id="detail-title"></h3>
-    <p class="detail-desc" id="detail-desc"></p>
+  <div class="toolbar">
+    <a class="tb" href="/" data-i18n="nav_main">Главная</a>
+    <a class="tb on" href="/music" data-i18n="nav_music">Музыка</a>
+    <a class="tb" href="/lyrics" data-i18n="nav_lyrics">Тексты</a>
   </div>
 
-  <script src="/i18n.js"></script>
-  <script>
-    initLang();
+  <div class="row">
+    <label for="sel" data-i18n="albums_label">Альбомы:</label>
+    <select class="field" id="sel">
+      <option value="" data-i18n="pick_album"></option>
+      <option value="1">DELUXE UND SCHÖNHEIT</option>
+      <option value="2">ANHEDONIA</option>
+      <option value="3">SUFFOCATE</option>
+    </select>
+  </div>
 
-    const detailTitle = document.getElementById('detail-title');
-    const detailDesc  = document.getElementById('detail-desc');
-    const covers      = document.querySelectorAll('.album-cover');
+  <div class="view">
+    <canvas id="cv"></canvas>
+    <div class="hint" id="hint" data-i18n="pick_album"></div>
+  </div>
 
-    function showAlbum(albumNum) {
-      const lang  = getCurrentLang();
-      const album = i18n[lang]['albums'][albumNum];
-      if (album) {
-        detailTitle.textContent = album.title;
-        detailDesc.textContent  = album.desc;
-      }
+  <div class="caption" id="caption"></div>
+
+  <div class="status">
+    <span class="s1" id="st1"></span>
+    <span class="s2" id="st2"></span>
+    <span class="s3">Internet</span>
+  </div>
+</div>
+
+<script src="/i18n.js"></script>
+<script src="/retro.js"></script>
+<script>
+  initLang();
+
+  const LINKS = {
+    '1': 'http://band.link/deluxeundschonheit',
+    '2': 'https://band.link/anh4rt',
+    '3': null
+  };
+
+  const sel     = document.getElementById('sel');
+  const cv      = document.getElementById('cv');
+  const hint    = document.getElementById('hint');
+  const caption = document.getElementById('caption');
+  const st1     = document.getElementById('st1');
+  const st2     = document.getElementById('st2');
+  let current = '';
+
+  function t() { return i18n[getCurrentLang()]; }
+
+  function renderCaption() {
+    if (!current) { caption.innerHTML = ''; return; }
+    const link = LINKS[current];
+    caption.innerHTML = '<p></p>' + (link
+      ? '<a class="btn" target="_blank" rel="noopener"></a>'
+      : '<span class="btn off"></span>');
+    caption.querySelector('p').textContent = t().albums[current].desc;
+    const b = caption.querySelector('.btn');
+    b.textContent = link ? t().listen : t().soon;
+    if (link) b.href = link;
+  }
+
+  sel.addEventListener('change', async function () {
+    current = sel.value;
+    caption.innerHTML = '';
+    if (!current) {
+      clearCanvas(cv); hint.classList.remove('hide');
+      st1.textContent = ''; st2.textContent = '';
+      return;
     }
+    hint.classList.add('hide');
+    const src = '/img/album0' + current + '.webp';
+    st2.textContent = LINKS[current] ? LINKS[current].replace(/^https?:\/\//, '') : src;
+    st1.textContent = t().loading;
+    const img = await loadImage(src);
+    if (!img || sel.value !== current) return;
+    const ok = await progressiveLoad(cv, img, p => { st1.textContent = t().loading + ' ' + p + '%'; });
+    if (!ok) return;
+    st1.textContent = t().done;
+    renderCaption();
+  });
 
-    covers.forEach(cover => {
-      cover.addEventListener('click', function () {
-        showAlbum(this.getAttribute('data-album'));
-      });
-    });
-
-    document.addEventListener('langChanged', function () {
-      if (detailTitle.textContent) {
-        for (const num of ['1','2','3']) {
-          for (const l of ['ru','en','de']) {
-            if (i18n[l]['albums'][num] && i18n[l]['albums'][num].title === detailTitle.textContent) {
-              showAlbum(num);
-              return;
-            }
-          }
-        }
-      }
-    });
-  </script>
+  document.addEventListener('langChanged', () => {
+    if (current && caption.innerHTML) renderCaption();
+    if (current && st1.textContent) st1.textContent = t().done;
+  });
+</script>
 </body>
 </html>

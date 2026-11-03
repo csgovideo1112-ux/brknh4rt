@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BRKNH4RT</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/img/img.ico" type="image/x-icon">
+</head>
+<body>
+<div class="win">
+  <div class="titlebar">
+    <img src="/img/img.ico" alt="">
+    <span class="name">brknh4rt.html</span>
+    <div class="winbtns">
+      <button class="tb" data-lang="ru" onclick="setLang('ru')">RU</button>
+      <button class="tb" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="tb" data-lang="de" onclick="setLang('de')">DE</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <a class="tb on" href="/" data-i18n="nav_main">Главная</a>
+    <a class="tb" href="/music" data-i18n="nav_music">Музыка</a>
+    <a class="tb" href="/lyrics" data-i18n="nav_lyrics">Тексты</a>
+  </div>
+
+  <div class="view"><canvas id="cv"></canvas></div>
+
+  <div class="status">
+    <span class="s1" id="st1">...</span>
+    <span class="s2" id="st2"></span>
+    <span class="s3">Internet</span>
+  </div>
+</div>
+
+<script src="/i18n.js"></script>
+<script src="/retro.js"></script>
+<script>
+  initLang();
+
+  const cv  = document.getElementById('cv');
+  const st1 = document.getElementById('st1');
+  const st2 = document.getElementById('st2');
+  const HOLD_MS = 4500;  
+  
+
+  (async function () {
+    const files = [1,2,3,4,5,6].map(n => '/img/photo0' + n + '.webp');
+    const imgs  = await Promise.all(files.map(loadImage));
+    const list  = files.map((src, i) => ({ src, img: imgs[i] })).filter(x => x.img);
+    let k = 0;
+
+    while (list.length) {
+      const { src, img } = list[k % list.length];
+      st2.textContent = src;
+      st1.textContent = i18n[getCurrentLang()].loading;
+      await progressiveLoad(cv, img, p => {
+        st1.textContent = i18n[getCurrentLang()].loading + ' ' + p + '%';
+      });
+      st1.textContent = i18n[getCurrentLang()].done;
+      await sleep(HOLD_MS);
+      k++;
+    }
+  })();
+</script>
+</body>
+</html>

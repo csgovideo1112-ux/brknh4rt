@@ -8,35 +8,96 @@
   <link rel="icon" href="/img/img.ico" type="image/x-icon">
 </head>
 <body>
-
-  <h1 class="title">BRKNH4RT</h1>
-
-  <div class="tabs">
-    <a href="/" data-i18n="nav_main">Главная</a>
-    <a href="/music" data-i18n="nav_music">Музыка</a>
-    <a href="/lyrics" class="active" data-i18n="nav_lyrics">Тексты</a>
+<div class="win">
+  <div class="titlebar">
+    <img src="/img/img.ico" alt="">
+    <span class="name">lyrics.html</span>
   </div>
 
-  <div class="lyrics-list" id="lyrics-container"></div>
+  <div class="toolbar">
+    <a class="tb" href="/" data-i18n="nav_main">Главная</a>
+    <a class="tb" href="/music" data-i18n="nav_music">Музыка</a>
+    <a class="tb on" href="/lyrics" data-i18n="nav_lyrics">Тексты</a>
+  </div>
 
-  <script src="/i18n.js"></script>
-  <script>
-    initLang();
-    renderLyrics();
+  <div class="panes">
+    <div class="panel src">
+      <div class="head" data-i18n="albums_head">Альбомы</div>
+      <ul id="albums"></ul>
+    </div>
 
-    document.addEventListener('langChanged', renderLyrics);
+    <div class="main">
+      <div class="panel tracks">
+        <div class="head" data-i18n="tracks_label">Треки</div>
+        <ul id="tracks"></ul>
+      </div>
+      <div class="panel lyrics">
+        <div class="body" id="lyrics"></div>
+      </div>
+    </div>
+  </div>
 
-    function renderLyrics() {
-      const lang      = getCurrentLang();
-      const songs     = i18n[lang]['lyrics'];
-      const container = document.getElementById('lyrics-container');
-      container.innerHTML = songs.map(song => `
-        <div class="song">
-          <h2>${song.title}</h2>
-          <p>${song.lines.join('<br>')}</p>
-        </div>
-      `).join('<hr class="divider">');
+  <div class="status">
+    <span class="s1" id="st1"></span>
+    <span class="s2" id="st2"></span>
+    <span class="s3">Internet</span>
+  </div>
+</div>
+
+<script src="/i18n.js"></script>
+<script>
+  initLang();
+
+  const elAlbums = document.getElementById('albums');
+  const elTracks = document.getElementById('tracks');
+  const elLyrics = document.getElementById('lyrics');
+  const st1  = document.getElementById('st1');
+  const st2  = document.getElementById('st2');
+
+  let curAlbum = null;   // '1' | '2' | '3'
+  let curTrack = null;   // index inside album
+
+  function T() { return i18n[getCurrentLang()]; }
+  function tracksOf(n) { return T().lyrics.filter(s => s.album === n); }
+
+  function render() {
+    // albums
+    elAlbums.innerHTML = '';
+    ['1','2','3'].forEach(n => {
+      const li = document.createElement('li');
+      li.textContent = T().albums[n].title;
+      if (n === curAlbum) li.className = 'sel';
+      li.onclick = () => { curAlbum = n; curTrack = null; render(); };
+      elAlbums.appendChild(li);
+    });
+
+    // tracks
+    elTracks.innerHTML = '';
+    const list = curAlbum ? tracksOf(curAlbum) : [];
+    list.forEach((s, i) => {
+      const li = document.createElement('li');
+      li.innerHTML = '<b>' + (i + 1) + '</b><span></span>';
+      li.querySelector('span').textContent = s.title;
+      if (i === curTrack) li.className = 'sel';
+      li.onclick = () => { curTrack = i; render(); };
+      elTracks.appendChild(li);
+    });
+
+    // lyrics / status
+    if (curAlbum && curTrack !== null) {
+      const s = list[curTrack];
+      elLyrics.textContent = s.lines.length ? s.lines.join('\n') : T().no_lyrics;
+    } else {
+      elLyrics.textContent = curAlbum
+        ? (list.length ? T().pick_track : T().soon)
+        : T().pick_album;
     }
-  </script>
+    st1.textContent = curAlbum ? T().tracks_label + ': ' + list.length : '';
+    st2.textContent = curAlbum ? T().albums[curAlbum].title : '';
+  }
+
+  render();
+  document.addEventListener('langChanged', render);
+</script>
 </body>
 </html>
