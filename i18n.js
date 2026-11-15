@@ -1,6 +1,8 @@
+/* ─── BRKNH4RT — локализация / localization / Lokalisierung ─── */
 
 const i18n = {
 
+  /* ══════════════════ РУССКИЙ ══════════════════ */
   ru: {
     nav_main:   'Главная',
     nav_music:  'Музыка',
@@ -9,13 +11,13 @@ const i18n = {
     soon:       'Скоро',
     albums_head:  'Альбомы',
     albums_label: 'Альбомы:',
-    pick_album:   '—альбом—',
+    pick_album:   '— выбери альбом —',
     tracks_label: 'Треки',
     col_title:    'Название',
     no_lyrics:    'Текста пока нет',
     loading:      'Загрузка...',
     done:         'Готово',
-    pick_track:   '-трек-',
+    pick_track:   'Выбери трек',
 
     index_desc: '</3',
 
@@ -35,6 +37,7 @@ const i18n = {
     },
 
     lyrics: [
+      /* — ANHEDONIA — */
       {
         album: '2',
         title: 'RAKETENEXPLOSION',
@@ -122,6 +125,7 @@ const i18n = {
         title: 'DELUXE',
         lines: []
       },
+      /* — DELUXE UND SCHÖNHEIT — */
       {
         album: '1',
         title: 'BODY',
@@ -239,6 +243,7 @@ const i18n = {
     ]
   },
 
+  /* ══════════════════ ENGLISH ══════════════════ */
   en: {
     nav_main:   'Main',
     nav_music:  'Music',
@@ -273,6 +278,7 @@ const i18n = {
     },
 
     lyrics: [
+      /* — ANHEDONIA — */
       {
         album: '2',
         title: 'RAKETENEXPLOSION',
@@ -360,6 +366,7 @@ const i18n = {
         title: 'DELUXE',
         lines: []
       },
+      /* — DELUXE UND SCHÖNHEIT — */
       {
         album: '1',
         title: 'BODY',
@@ -477,6 +484,7 @@ const i18n = {
     ]
   },
 
+  /* ══════════════════ DEUTSCH ══════════════════ */
   de: {
     nav_main:   'Hauptseite',
     nav_music:  'Musik',
@@ -511,6 +519,7 @@ const i18n = {
     },
 
     lyrics: [
+      /* — ANHEDONIA — */
       {
         album: '2',
         title: 'RAKETENEXPLOSION',
@@ -598,6 +607,7 @@ const i18n = {
         title: 'DELUXE',
         lines: []
       },
+      /* — DELUXE UND SCHÖNHEIT — */
       {
         album: '1',
         title: 'BODY',
@@ -729,14 +739,16 @@ function applyLang(lang) {
   const data = i18n[lang];
   if (!data) return;
 
-
+  // html[lang]
   document.documentElement.lang = lang;
 
+  // data-i18n elements (nav links, description, etc.)
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (data[key] !== undefined) el.textContent = data[key];
   });
 
+  // language buttons
   document.querySelectorAll('[data-lang]').forEach(b => {
     b.classList.toggle('on', b.dataset.lang === lang);
   });

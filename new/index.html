@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BRKNH4RT — ???</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/img/img.ico" type="image/x-icon">
+</head>
+<body>
+<div class="win">
+  <div class="titlebar">
+    <img src="/img/img.ico" alt="">
+    <span class="name">???.html</span>
+    <div class="winbtns">
+      <button class="tb" data-lang="ru" onclick="setLang('ru')">RU</button>
+      <button class="tb" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="tb" data-lang="de" onclick="setLang('de')">DE</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <a class="tb" href="/"       data-i18n="nav_main">Главная</a>
+    <a class="tb" href="/music"  data-i18n="nav_music">Музыка</a>
+    <a class="tb" href="/lyrics" data-i18n="nav_lyrics">Тексты</a>
+    <a class="tb on" href="/new">???</a>
+  </div>
+
+  <div class="view" id="gif-view">
+    <img src="/img/vid-vid.gif" alt="snippet" style="width:100%;height:100%;object-fit:cover;display:block;">
+  </div>
+
+  <div class="countdown-wrap">
+    <div id="countdown">ДД:ЧЧ:ММ:СС</div>
+  </div>
+
+  <div class="status">
+    <span class="s1" id="st1">18.12.2025</span>
+    <span class="s2" id="st2">BRKNH4RT</span>
+    <span class="s3">Internet</span>
+  </div>
+</div>
+
+<style>
+.view { overflow: hidden; }
+.countdown-wrap {
+  padding: 10px 10px 10px;
+  display: flex;
+  justify-content: center;
+}
+#countdown {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: clamp(28px, 7vw, 64px);
+  letter-spacing: 4px;
+  color: #fff;
+  text-align: center;
+  border: 2px solid #fff;
+  padding: 6px 24px;
+  background: #000;
+  line-height: 1.1;
+}
+@media (max-width: 700px) {
+  #countdown { font-size: clamp(24px, 9vw, 48px); letter-spacing: 2px; padding: 5px 14px; }
+}
+</style>
+
+<script src="/i18n.js"></script>
+<script>
+  initLang();
+
+  const TARGET = new Date('2025-12-18T00:00:00');
+
+  function pad(n) { return String(Math.floor(n)).padStart(2, '0'); }
+
+  function tick() {
+    const diff = TARGET - Date.now();
+    const el = document.getElementById('countdown');
+    if (diff <= 0) {
+      el.textContent = '00:00:00:00';
+      return;
+    }
+    const days  = diff / 86400000;
+    const hours = (diff % 86400000) / 3600000;
+    const mins  = (diff % 3600000)  / 60000;
+    const secs  = (diff % 60000)    / 1000;
+    el.textContent = pad(days) + ':' + pad(hours) + ':' + pad(mins) + ':' + pad(secs);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>

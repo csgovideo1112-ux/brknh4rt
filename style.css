@@ -1,14 +1,15 @@
-
+/* BRKNH4RT — old OS window, black + white, 4:3.
+   Fonts and colors live in :root. */
 :root {
   --font:  Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  --bg:    #000;     
-  --text:  #fff;    
-  --line:  #fff;     
-  --light: #fff;    
-  --dark:  #000;      
+  --bg:    #000;      /* background */
+  --text:  #fff;      /* text */
+  --line:  #fff;      /* outlines */
+  --light: #fff;      /* bevel: lit edge */
+  --dark:  #000;      /* bevel: shadow edge */
   --mid:   #808080;
-  --sel:   #000080;   
-  --t1:    #4a4a4a;   
+  --sel:   #000080;   /* selected row */
+  --t1:    #4a4a4a;   /* title bar gradient (gray) */
   --t2:    #9a9a9a;
 }
 
@@ -33,7 +34,7 @@ body {
 a { color: var(--text); }
 canvas { display: block; width: 100%; height: 100%; }
 
-
+/* ── window: 4:3 on desktop, full screen on phones ── */
 .win {
   display: flex;
   flex-direction: column;
@@ -67,6 +68,7 @@ canvas { display: block; width: 100%; height: 100%; }
 .titlebar .name { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .winbtns { display: flex; gap: 2px; }
 
+/* raised bevel buttons */
 .tb {
   font: inherit;
   font-size: 15px;
@@ -171,6 +173,7 @@ a.btn:active { border-color: var(--dark) var(--light) var(--light) var(--dark); 
 .status .s1 { flex: 1; }
 .status .s2 { flex: 1.4; }
 
+/* ── lyrics: lists inside the same window ── */
 .panes { flex: 1; min-height: 0; display: flex; gap: 6px; padding: 6px; }
 
 .panel {
@@ -203,6 +206,7 @@ a.btn:active { border-color: var(--dark) var(--light) var(--light) var(--dark); 
   white-space: pre-line;
 }
 
+/* ── mobile ── */
 @media (max-width: 700px) {
   .win { border: 0; }
   .titlebar { font-size: 16px; }

@@ -1,4 +1,4 @@
-
+/* old-internet progressive image loading (blocky -> sharp), drawn on <canvas> */
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 function paint(c) {
@@ -30,11 +30,12 @@ function paint(c) {
   ctx.drawImage(t, dx, dy, dw, dh);
 }
 
+/* returns true if finished, false if a newer load replaced it */
 async function progressiveLoad(c, img, onStep) {
   const token = c._tok = (c._tok || 0) + 1;
-  const STEPS = [48, 24, 12, 6, 3, 1];  
-  const PASS_MS = 200;                    
-  const START_MS = 250;            
+  const STEPS = [48, 24, 12, 6, 3, 1];   // block size on each pass
+  const PASS_MS = 200;                    // time per pass
+  const START_MS = 250;                   // blank wait before first pass
 
   c._s = null; paint(c);
   await sleep(START_MS);

@@ -23,6 +23,7 @@
     <a class="tb on" href="/" data-i18n="nav_main">Главная</a>
     <a class="tb" href="/music" data-i18n="nav_music">Музыка</a>
     <a class="tb" href="/lyrics" data-i18n="nav_lyrics">Тексты</a>
+    <a class="tb" href="/new">???</a>
   </div>
 
   <div class="view"><canvas id="cv"></canvas></div>
@@ -42,8 +43,7 @@
   const cv  = document.getElementById('cv');
   const st1 = document.getElementById('st1');
   const st2 = document.getElementById('st2');
-  const HOLD_MS = 4500;  
-  
+  const HOLD_MS = 4500;   // how long a loaded photo stays on screen
 
   (async function () {
     const files = [1,2,3,4,5,6].map(n => '/img/photo0' + n + '.webp');
